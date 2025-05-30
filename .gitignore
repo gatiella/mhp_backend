@@ -1,0 +1,16 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Django
+*.sqlite3
+__pycache__/
+*.py[cod]
+*.log
+/media/
+/staticfiles/
+
+# Node/Web
+node_modules/
+dist/
