@@ -153,7 +153,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # For production
 STATICFILES_DIRS = [BASE_DIR / 'static']  # For development
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Ensure staticfiles finders are properly configured
 STATICFILES_FINDERS = [
@@ -223,13 +222,13 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = f'Mental Health Partner <{config("EMAIL_HOST_USER")}>'
 
 # Frontend URL for email verification links
-FRONTEND_URL = config('FRONTEND_URL', default='mhpbackend-production.up.railway.app:8000')
+FRONTEND_URL = config('FRONTEND_URL', default='http://192.168.74.204:8000')
 
 # Updated CORS Settings for Railway
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [
     "https://mhpbackend-production.up.railway.app",  # Your Railway backend URL
-    "mhpbackend-production.up.railway.app:8000",  # Your Django backend (local)
+    "http://192.168.74.204:8000",  # Your Django backend (local)
     "http://localhost:8080",        # Flutter web development
     "http://127.0.0.1:8080",       # Alternative localhost
     "http://localhost:8000",       # Local Django development
