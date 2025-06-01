@@ -40,7 +40,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '192.168.74.204', 
     '0.0.0.0',
-    'mhpbackend-production.up.railway.app',  # Your Railway domain
+    'mentalhealthpartner.up.railway.app',  # Your Railway domain
     '.railway.app',  # Allow all Railway subdomains
     'your-render-app-hostname.onrender.com',  # Keep existing Render domain if needed
 ]
@@ -223,13 +223,13 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = f'Mental Health Partner <{config("EMAIL_HOST_USER")}>'
 
 # Frontend URL for email verification links
-FRONTEND_URL = config('FRONTEND_URL', default='http://mhpbackend-production.up.railway.app:8000')
+FRONTEND_URL = config('FRONTEND_URL', default='mentalhealthpartner.up.railway.app:8000')
 
 # Updated CORS Settings for Railway
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [
-    "https://mhpbackend-production.up.railway.app",  # Your Railway backend URL
-    "http://mhpbackend-production.up.railway.app:8000",  # Your Django backend (local)
+    "mentalhealthpartner.up.railway.app",  # Your Railway backend URL
+    "mentalhealthpartner.up.railway.app:8000",  # Your Django backend (local)
     "http://localhost:8080",        # Flutter web development
     "http://127.0.0.1:8080",       # Alternative localhost
     "http://localhost:8000",       # Local Django development
