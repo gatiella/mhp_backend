@@ -82,7 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'mental_health_partner.urls'
+#ROOT_URLCONF = 'mental_health_partner.urls'
 
 TEMPLATES = [
     {
@@ -101,7 +101,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mental_health_partner.wsgi.application'
+#WSGI_APPLICATION = 'mental_health_partner.wsgi.application'
+WSGI_APPLICATION = 'backend.wsgi.application'
+ROOT_URLCONF = 'backend.urls'
 
 
 # Database
@@ -153,6 +155,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # For production
 STATICFILES_DIRS = [BASE_DIR / 'static']  # For development
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Ensure staticfiles finders are properly configured
 STATICFILES_FINDERS = [
