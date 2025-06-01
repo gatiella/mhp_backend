@@ -223,13 +223,13 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = f'Mental Health Partner <{config("EMAIL_HOST_USER")}>'
 
 # Frontend URL for email verification links
-FRONTEND_URL = config('FRONTEND_URL', default='mentalhealthpartner.up.railway.app:8000')
+FRONTEND_URL = config('FRONTEND_URL', default='http://mentalhealthpartner.up.railway.app:8000')
 
 # Updated CORS Settings for Railway
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [
-    "mentalhealthpartner.up.railway.app",  # Your Railway backend URL
-    "mentalhealthpartner.up.railway.app:8000",  # Your Django backend (local)
+    "https://mentalhealthpartner.up.railway.app",  # Your Railway backend URL
+    "http://mentalhealthpartner.up.railway.app:8000",  # Your Django backend (local)
     "http://localhost:8080",        # Flutter web development
     "http://127.0.0.1:8080",       # Alternative localhost
     "http://localhost:8000",       # Local Django development
