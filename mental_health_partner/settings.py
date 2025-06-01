@@ -34,7 +34,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 CSP_DEFAULT_SRC = ("'self'",)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1','192.168.230.204', '0.0.0.0']# Application definition
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','192.168.74.204', '0.0.0.0']# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -211,12 +211,12 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = f'Mental Health Partner <{config("EMAIL_HOST_USER")}>'
 
 # Frontend URL for email verification links
-FRONTEND_URL = config('FRONTEND_URL', default='http://192.168.230.204:8000')
+FRONTEND_URL = config('FRONTEND_URL', default='http://192.168.74.204:8000')
 
 # CORS Settings
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [
-    "http://192.168.230.204:8000",  # Your Django backend
+    "http://192.168.74.204:8000",  # Your Django backend
     "http://localhost:8080",        # Flutter web development
     "http://127.0.0.1:8080",       # Alternative localhost
 ]
