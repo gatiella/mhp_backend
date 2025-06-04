@@ -1,20 +1,22 @@
 {% extends "rest_framework/base.html" %}
 {% load rest_framework %}
 
-{% block page_title %}{{ view.get_view_name }}{% endblock %}
-{% block page_description %}{{ view.get_view_description|default:"API Endpoint" }}{% endblock %}
+{% block page_title %}{{ name|default:"API Endpoint" }}{% endblock %}
+{% block page_description %}{{ description|default:"API Endpoint Documentation" }}{% endblock %}
 
 {% block content %}
 <div class="api-content">
     <div class="breadcrumb">
-        <a href="/">🏠 Home</a> / 
-        <a href="/api/">API Root</a> / 
-        <span>{{ view.get_view_name }}</span>
+        <a href="/">🏠 Home</a> /
+        <a href="/api/">API Root</a> /
+        <span>{{ name|default:"Current Page" }}</span>
     </div>
     
-    <h2>{{ view.get_view_name }}</h2>
-    <p style="opacity: 0.8; margin-bottom: 1.5rem;">{{ view.get_view_description }}</p>
-
+    <h2>{{ name|default:"API Endpoint" }}</h2>
+    {% if description %}
+        <p style="opacity: 0.8; margin-bottom: 1.5rem;">{{ description }}</p>
+    {% endif %}
+    
     {% if allowed_methods %}
     <div style="margin: 1rem 0;">
         {% for method in allowed_methods %}
@@ -39,7 +41,11 @@
     {% if content %}
     <div class="form-section">
         <h3><i class="fas fa-code"></i> Response Data</h3>
-        <div class="status-code status-{{ status_code }}">{{ status_code }} {{ status_text }}</div>
+        {% if status_code %}
+            <div class="status-code status-{{ status_code }}">
+                {{ status_code }} {% if status_text %}{{ status_text }}{% endif %}
+            </div>
+        {% endif %}
         <div class="json-response">{{ content|safe }}</div>
     </div>
     {% endif %}
@@ -57,8 +63,19 @@
     <div class="form-section">
         <h3><i class="fas fa-list"></i> Pagination</h3>
         <div class="pagination-info">
-            <p>Page {{ page_obj.number }} of {{ paginator.num_pages }}</p>
+            {% if page_obj %}
+                <p>Page {{ page_obj.number }} of {{ paginator.num_pages }}</p>
+            {% endif %}
             <p>{{ paginator.count }} total items</p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if results %}
+    <div class="form-section">
+        <h3><i class="fas fa-database"></i> Results</h3>
+        <div class="json-response">
+            <pre>{{ results|safe }}</pre>
         </div>
     </div>
     {% endif %}

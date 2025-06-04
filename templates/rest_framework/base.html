@@ -1,9 +1,10 @@
+{% load rest_framework %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mental Health Partner API{% endblock %}</title>
+    <title>{% block title %}{% if name %}{{ name }} - {% endif %}Mental Health Partner API{% endblock %}</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -84,6 +85,7 @@
         .method-post { background: #007bff; }
         .method-put { background: #ffc107; color: #000; }
         .method-delete { background: #dc3545; }
+        .method-patch { background: #17a2b8; }
 
         .endpoint-url {
             background: rgba(0, 0, 0, 0.2);
@@ -106,9 +108,12 @@
         }
 
         .status-200 { background: #28a745; }
+        .status-201 { background: #28a745; }
         .status-400 { background: #ffc107; color: #000; }
         .status-401 { background: #dc3545; }
+        .status-403 { background: #dc3545; }
         .status-404 { background: #6c757d; }
+        .status-500 { background: #dc3545; }
 
         .json-response {
             background: rgba(0, 0, 0, 0.3);
@@ -119,6 +124,12 @@
             font-size: 0.9rem;
             overflow-x: auto;
             border-left: 4px solid #4facfe;
+        }
+
+        .json-response pre {
+            color: #ffffff;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .form-section {
@@ -143,7 +154,7 @@
             font-weight: 600;
         }
 
-        .form-control {
+        .form-control, input, textarea, select {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -153,11 +164,11 @@
             font-size: 0.9rem;
         }
 
-        .form-control::placeholder {
+        .form-control::placeholder, input::placeholder, textarea::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
 
-        .btn {
+        .btn, button {
             padding: 0.8rem 1.5rem;
             border: none;
             border-radius: 25px;
@@ -168,7 +179,7 @@
             margin-right: 0.5rem;
         }
 
-        .btn-primary {
+        .btn-primary, button[type="submit"] {
             background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
             color: white;
         }
@@ -179,7 +190,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .btn:hover {
+        .btn:hover, button:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
@@ -223,6 +234,16 @@
             margin: 1rem 0;
         }
 
+        /* DRF Form Styling */
+        .form-horizontal .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-horizontal label {
+            color: #4facfe;
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -258,10 +279,11 @@
         {% block content %}
         <div class="api-content">
             <div class="breadcrumb">
-                <a href="/api/">API Root</a> / {{ request.resolver_match.url_name|default:"Current Page" }}
+                <a href="/api/">API Root</a> / 
+                {% if name %}{{ name }}{% else %}Current Page{% endif %}
             </div>
             
-            <h2>{{ view.get_view_name }}</h2>
+            <h2>{% if name %}{{ name }}{% else %}API Endpoint{% endif %}</h2>
             
             {% if allowed_methods %}
             <div style="margin: 1rem 0;">
@@ -287,7 +309,11 @@
             {% if content %}
             <div class="form-section">
                 <h3>Response</h3>
-                <div class="status-code status-{{ status_code }}">{{ status_code }} {{ status_text }}</div>
+                {% if status_code %}
+                    <div class="status-code status-{{ status_code }}">
+                        {{ status_code }} {% if status_text %}{{ status_text }}{% endif %}
+                    </div>
+                {% endif %}
                 <div class="json-response">{{ content|safe }}</div>
             </div>
             {% endif %}
@@ -310,8 +336,10 @@
             jsonElements.forEach(el => {
                 try {
                     const jsonText = el.textContent;
-                    const parsed = JSON.parse(jsonText);
-                    el.innerHTML = '<pre>' + JSON.stringify(parsed, null, 2) + '</pre>';
+                    if (jsonText.trim().startsWith('{') || jsonText.trim().startsWith('[')) {
+                        const parsed = JSON.parse(jsonText);
+                        el.innerHTML = '<pre>' + JSON.stringify(parsed, null, 2) + '</pre>';
+                    }
                 } catch(e) {
                     // Not valid JSON, leave as is
                 }
@@ -323,7 +351,7 @@
                 el.style.cursor = 'pointer';
                 el.title = 'Click to copy';
                 el.addEventListener('click', function() {
-                    navigator.clipboard.writeText(this.textContent);
+                    navigator.clipboard.writeText(this.textContent.trim());
                     const original = this.textContent;
                     this.textContent = 'Copied!';
                     setTimeout(() => {
