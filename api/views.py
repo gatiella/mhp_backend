@@ -10,6 +10,12 @@ def landing_page(request):
 # Keep your existing API root for /api/browse/ or similar
 @api_view(['GET'])
 @permission_classes([AllowAny])
+def api_health(request):
+    return Response({
+        'status': 'healthy',
+        'message': 'Mental Health Partner API is running',
+        'version': '1.0.0'
+    })
 def api_root(request):
     return Response({
         'message': 'Mental Health Partner API',

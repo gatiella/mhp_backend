@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import api_root
+from .views import api_root, api_health
 
 urlpatterns = [
     path('', api_root, name='api-root'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('analytics/', include('analytics.urls')),
     path('gamification/', include('gamification.urls')),
     path('community/', include('community.urls')),
+    path('health/', api_health, name='api-health'),
 ]
