@@ -10,5 +10,4 @@ urlpatterns = [
     path('analytics/', include('analytics.urls')),
     path('gamification/', include('gamification.urls')),
     path('community/', include('community.urls')),
-    path('health/', api_health, name='api-health'),
 ]
