@@ -263,6 +263,23 @@
             padding: 0.2rem 0.4rem;
             border-radius: 4px;
         }
+
+        .label {
+            border-radius: 15px;
+            padding: 0.3rem 0.8rem;
+        }
+
+        .label-success {
+            background-color: #28a745;
+        }
+
+        .label-danger {
+            background-color: #dc3545;
+        }
+
+        .label-info {
+            background-color: #17a2b8;
+        }
     </style>
     {% endblock %}
 </head>
@@ -297,6 +314,17 @@
 
     <div class="container-fluid" style="margin-top: 70px;">
         {% block breadcrumbs %}
+            {% if breadcrumblist %}
+                <ul class="breadcrumb">
+                    {% for breadcrumb_name, breadcrumb_url in breadcrumblist %}
+                        {% if forloop.last %}
+                            <li class="active">{{ breadcrumb_name }}</li>
+                        {% else %}
+                            <li><a href="{{ breadcrumb_url }}">{{ breadcrumb_name }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
         {% endblock %}
 
         {% block content %}

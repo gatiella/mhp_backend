@@ -40,30 +40,26 @@
             <strong>Endpoint:</strong> {{ request.build_absolute_uri }}
         </div>
 
-        {% if response_headers %}
-            <div class="response-info">
-                <h3>Response Headers</h3>
-                {% for key, value in response_headers.items %}
-                    <div><strong>{{ key }}:</strong> {{ value }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        {% if content %}
+        {% if response.status_code %}
             <div class="response-info">
                 <h3>Response</h3>
-                {% if status_code %}
-                    <div style="margin-bottom: 1rem;">
-                        <span class="label label-{% if status_code == 200 or status_code == 201 %}success{% elif status_code >= 400 %}danger{% else %}info{% endif %}">
-                            {{ status_code }} {% if status_text %}{{ status_text }}{% endif %}
-                        </span>
-                    </div>
+                <div style="margin-bottom: 1rem;">
+                    <span class="label label-{% if response.status_code == 200 or response.status_code == 201 %}success{% elif response.status_code >= 400 %}danger{% else %}info{% endif %}">
+                        {{ response.status_code }} {% if response.status_text %}{{ response.status_text }}{% endif %}
+                    </span>
+                </div>
+                {% if content %}
+                    <pre>{{ content|safe }}</pre>
                 {% endif %}
+            </div>
+        {% elif content %}
+            <div class="response-info">
+                <h3>Response</h3>
                 <pre>{{ content|safe }}</pre>
             </div>
         {% endif %}
 
-        {% if display_edit_forms %}
+        {% if display_edit_forms and serializer %}
             <div class="well">
                 <form action="{{ request.get_full_path }}" method="POST" class="form-horizontal">
                     {% csrf_token %}
@@ -89,7 +85,7 @@
                         <legend>Raw Data</legend>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <textarea name="raw_data" class="form-control" rows="10" placeholder="Enter raw JSON data">{{ raw_data }}</textarea>
+                                <textarea name="raw_data" class="form-control" rows="10" placeholder="Enter raw JSON data">{% if raw_data %}{{ raw_data }}{% endif %}</textarea>
                             </div>
                         </div>
                         <div class="form-actions">
