@@ -185,12 +185,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
+        # Remove this line to disable browsable API
+        # 'rest_framework.renderers.BrowsableAPIRenderer',
     ]
 }
-
-
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
