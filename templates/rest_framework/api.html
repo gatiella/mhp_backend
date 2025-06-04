@@ -1,0 +1,66 @@
+{% extends "rest_framework/base.html" %}
+{% load rest_framework %}
+
+{% block page_title %}{{ view.get_view_name }}{% endblock %}
+{% block page_description %}{{ view.get_view_description|default:"API Endpoint" }}{% endblock %}
+
+{% block content %}
+<div class="api-content">
+    <div class="breadcrumb">
+        <a href="/">🏠 Home</a> / 
+        <a href="/api/">API Root</a> / 
+        <span>{{ view.get_view_name }}</span>
+    </div>
+    
+    <h2>{{ view.get_view_name }}</h2>
+    <p style="opacity: 0.8; margin-bottom: 1.5rem;">{{ view.get_view_description }}</p>
+
+    {% if allowed_methods %}
+    <div style="margin: 1rem 0;">
+        {% for method in allowed_methods %}
+            <span class="method-badge method-{{ method|lower }}">{{ method }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="endpoint-url">
+        {{ request.build_absolute_uri }}
+    </div>
+
+    {% if response_headers %}
+    <div class="form-section">
+        <h3><i class="fas fa-info-circle"></i> Response Headers</h3>
+        {% for key, value in response_headers.items %}
+            <div><strong>{{ key }}:</strong> {{ value }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if content %}
+    <div class="form-section">
+        <h3><i class="fas fa-code"></i> Response Data</h3>
+        <div class="status-code status-{{ status_code }}">{{ status_code }} {{ status_text }}</div>
+        <div class="json-response">{{ content|safe }}</div>
+    </div>
+    {% endif %}
+
+    {% if display_edit_forms %}
+    <div class="form-section">
+        <h3><i class="fas fa-edit"></i> Try it out</h3>
+        <div class="form-container">
+            {% render_form serializer %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if paginator %}
+    <div class="form-section">
+        <h3><i class="fas fa-list"></i> Pagination</h3>
+        <div class="pagination-info">
+            <p>Page {{ page_obj.number }} of {{ paginator.num_pages }}</p>
+            <p>{{ paginator.count }} total items</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
