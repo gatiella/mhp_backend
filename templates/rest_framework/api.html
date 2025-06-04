@@ -1,0 +1,239 @@
+{% extends "rest_framework/base.html" %}
+{% load rest_framework %}
+
+{% block title %}
+    {% if name %}{{ name }} - {% endif %}Mental Health Partner API
+{% endblock %}
+
+{% block branding %}
+    <a class="navbar-brand" rel="nofollow" href="/">
+        <i class="fas fa-brain"></i> Mental Health Partner API
+    </a>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="{% url 'api-root' %}">API Root</a></li>
+        {% if name %}
+            <li class="active">{{ name }}</li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
+{% block style %}
+    {{ block.super }}
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: white !important;
+        }
+
+        .container-fluid {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 2rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: #4facfe;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: white;
+        }
+
+        .well {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            border-radius: 25px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            padding: 1rem;
+        }
+
+        .highlight {
+            background: transparent;
+        }
+
+        .response-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .method-get { background: #28a745; color: white; }
+        .method-post { background: #007bff; color: white; }
+        .method-put { background: #ffc107; color: #000; }
+        .method-delete { background: #dc3545; color: white; }
+        .method-patch { background: #17a2b8; color: white; }
+
+        .status-code {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .status-200, .status-201 { background: #28a745; color: white; }
+        .status-400 { background: #ffc107; color: #000; }
+        .status-401, .status-403 { background: #dc3545; color: white; }
+        .status-404 { background: #6c757d; color: white; }
+        .status-500 { background: #dc3545; color: white; }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+    <div class="navbar navbar-static-top navbar-inverse">
+        <div class="container">
+            {% block branding %}
+                <a class="navbar-brand" rel="nofollow" href="/">
+                    <i class="fas fa-brain"></i> Mental Health Partner API
+                </a>
+            {% endblock %}
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">Home</a></li>
+                <li><a href="{% url 'api-root' %}">API Root</a></li>
+                <li><a href="/admin/">Admin</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="content-main">
+        <div class="page-header">
+            <h1>
+                {% if name %}{{ name }}{% else %}API Endpoint{% endif %}
+                {% if allowed_methods %}
+                    <div style="margin-top: 0.5rem;">
+                        {% for method in allowed_methods %}
+                            <span class="method-badge method-{{ method|lower }}">{{ method }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </h1>
+        </div>
+
+        {% if description %}
+            <div class="response-info">
+                <p>{{ description }}</p>
+            </div>
+        {% endif %}
+
+        <div class="response-info">
+            <strong>Endpoint:</strong> {{ request.build_absolute_uri }}
+        </div>
+
+        {% if response_headers %}
+            <div class="response-info">
+                <h3>Response Headers</h3>
+                {% for key, value in response_headers.items %}
+                    <div><strong>{{ key }}:</strong> {{ value }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if content %}
+            <div class="response-info">
+                <h3>Response</h3>
+                {% if status_code %}
+                    <div class="status-code status-{{ status_code }}">
+                        {{ status_code }} {% if status_text %}{{ status_text }}{% endif %}
+                    </div>
+                {% endif %}
+                <pre>{{ content|safe }}</pre>
+            </div>
+        {% endif %}
+
+        {% if display_edit_forms %}
+            <form action="{{ request.get_full_path }}" method="POST">
+                {% csrf_token %}
+                <fieldset>
+                    {% render_form serializer %}
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="icon-ok icon-white"></i> POST
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

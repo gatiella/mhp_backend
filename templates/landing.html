@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Partner API</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 3rem 0;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .api-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .api-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .api-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #4facfe;
+        }
+
+        .api-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .api-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .endpoint-url {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #4facfe;
+            margin-top: 1rem;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .docs-section {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .docs-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-brain"></i> Mental Health Partner API</h1>
+            <p>Professional mental health support platform providing comprehensive care through modern technology</p>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>API Status: Online</span>
+            </div>
+        </div>
+
+        <div class="api-grid">
+            <div class="api-card" onclick="window.open('/api/users/', '_blank')">
+                <i class="fas fa-users"></i>
+                <h3>Users Management</h3>
+                <p>Manage user accounts, profiles, and authentication for mental health professionals and clients</p>
+                <div class="endpoint-url">GET /api/users/</div>
+            </div>
+
+            <div class="api-card" onclick="window.open('/api/conversation/', '_blank')">
+                <i class="fas fa-comments"></i>
+                <h3>Conversations</h3>
+                <p>Handle therapeutic conversations, session notes, and communication between users and professionals</p>
+                <div class="endpoint-url">GET /api/conversation/</div>
+            </div>
+
+            <div class="api-card" onclick="window.open('/api/journal/', '_blank')">
+                <i class="fas fa-book"></i>
+                <h3>Journal Entries</h3>
+                <p>Manage personal journal entries, mood tracking, and self-reflection tools for mental wellness</p>
+                <div class="endpoint-url">GET /api/journal/</div>
+            </div>
+
+            <div class="api-card" onclick="window.open('/api/mood/', '_blank')">
+                <i class="fas fa-heart"></i>
+                <h3>Mood Tracking</h3>
+                <p>Track emotional states, mood patterns, and psychological well-being metrics over time</p>
+                <div class="endpoint-url">GET /api/mood/</div>
+            </div>
+
+            <div class="api-card" onclick="window.open('/api/analytics/', '_blank')">
+                <i class="fas fa-chart-line"></i>
+                <h3>Analytics</h3>
+                <p>Generate insights from user data, progress reports, and therapeutic outcome measurements</p>
+                <div class="endpoint-url">GET /api/analytics/</div>
+            </div>
+
+            <div class="api-card" onclick="window.open('/api/gamification/', '_blank')">
+                <i class="fas fa-trophy"></i>
+                <h3>Gamification</h3>
+                <p>Motivational features including achievements, progress badges, and engagement rewards</p>
+                <div class="endpoint-url">GET /api/gamification/</div>
+            </div>
+
+            <div class="api-card" onclick="window.open('/api/community/', '_blank')">
+                <i class="fas fa-handshake"></i>
+                <h3>Community Support</h3>
+                <p>Peer support groups, community forums, and collaborative mental health resources</p>
+                <div class="endpoint-url">GET /api/community/</div>
+            </div>
+        </div>
+
+        <div class="docs-section">
+            <h2>API Documentation</h2>
+            <p>Explore our comprehensive API documentation and testing interfaces</p>
+            <div class="docs-buttons">
+                <a href="/swagger/" class="btn btn-primary">
+                    <i class="fas fa-code"></i>
+                    Swagger UI
+                </a>
+                <a href="/redoc/" class="btn btn-primary">
+                    <i class="fas fa-file-alt"></i>
+                    ReDoc
+                </a>
+                <a href="/api/" class="btn btn-secondary">
+                    <i class="fas fa-terminal"></i>
+                    Browse API
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Mental Health Partner API. Built with Django REST Framework.</p>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.api-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
