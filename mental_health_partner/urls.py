@@ -2,12 +2,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from api.views import landing_page
+
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    path('', landing_page, name='landing-page'),  # Beautiful landing page at root
+    path('', RedirectView.as_view(url='/api/', permanent=False)),
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),  # Your API endpoints
+    path('api/', include('api.urls')),
 ]
 
 # Serve static and media files
