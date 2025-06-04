@@ -1,365 +1,258 @@
 {% load rest_framework %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% if name %}{{ name }} - {% endif %}Mental Health Partner API{% endblock %}</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    {% block head %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Mental Health Partner API{% endblock %}</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        
+        {% block style %}
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #ffffff;
-        }
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                color: #ffffff;
+            }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+            .navbar {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 1rem 0;
+            }
 
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
-        }
+            .navbar .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+            .navbar-brand {
+                color: white !important;
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 1.5rem;
+            }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+            .nav {
+                display: flex;
+                list-style: none;
+                gap: 1rem;
+            }
 
-        .breadcrumb {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+            .nav a {
+                color: rgba(255, 255, 255, 0.8);
+                text-decoration: none;
+                padding: 0.5rem 1rem;
+                border-radius: 25px;
+                transition: all 0.3s ease;
+            }
 
-        .breadcrumb a {
-            color: #4facfe;
-            text-decoration: none;
-            margin-right: 0.5rem;
-        }
+            .nav a:hover {
+                color: white;
+                background: rgba(255, 255, 255, 0.1);
+            }
 
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
+            .container-fluid {
+                max-width: 1200px;
+                margin: 2rem auto;
+                padding: 2rem;
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
 
-        .api-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        .method-badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-right: 1rem;
-        }
-
-        .method-get { background: #28a745; }
-        .method-post { background: #007bff; }
-        .method-put { background: #ffc107; color: #000; }
-        .method-delete { background: #dc3545; }
-        .method-patch { background: #17a2b8; }
-
-        .endpoint-url {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1rem;
-            border-radius: 8px;
-            font-family: 'Monaco', monospace;
-            font-size: 1rem;
-            color: #4facfe;
-            margin: 1rem 0;
-            word-break: break-all;
-        }
-
-        .status-code {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-right: 1rem;
-        }
-
-        .status-200 { background: #28a745; }
-        .status-201 { background: #28a745; }
-        .status-400 { background: #ffc107; color: #000; }
-        .status-401 { background: #dc3545; }
-        .status-403 { background: #dc3545; }
-        .status-404 { background: #6c757d; }
-        .status-500 { background: #dc3545; }
-
-        .json-response {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            font-family: 'Monaco', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            border-left: 4px solid #4facfe;
-        }
-
-        .json-response pre {
-            color: #ffffff;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .form-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-        }
-
-        .form-section h3 {
-            margin-bottom: 1rem;
-            color: #4facfe;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .form-control, input, textarea, select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .form-control::placeholder, input::placeholder, textarea::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .btn, button {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-right: 0.5rem;
-        }
-
-        .btn-primary, button[type="submit"] {
-            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn:hover, button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .nav-link {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .error-message {
-            background: rgba(220, 53, 69, 0.2);
-            border: 1px solid #dc3545;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-
-        .success-message {
-            background: rgba(40, 167, 69, 0.2);
-            border: 1px solid #28a745;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-
-        /* DRF Form Styling */
-        .form-horizontal .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-horizontal label {
-            color: #4facfe;
-            font-weight: 600;
-        }
-
-        @media (max-width: 768px) {
-            .container {
+            .breadcrumb {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
                 padding: 1rem;
+                margin-bottom: 2rem;
+                list-style: none;
+                display: flex;
+                gap: 0.5rem;
             }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .nav-links {
-                flex-direction: column;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-brain"></i> {% block page_title %}Mental Health Partner API{% endblock %}</h1>
-            <p>{% block page_description %}Professional mental health support platform{% endblock %}</p>
-        </div>
 
-        <div class="nav-links">
-            <a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a>
-            <a href="/api/" class="nav-link"><i class="fas fa-server"></i> API Root</a>
-            <a href="/api/users/" class="nav-link"><i class="fas fa-users"></i> Users</a>
-            <a href="/api/conversation/" class="nav-link"><i class="fas fa-comments"></i> Conversations</a>
-            <a href="/api/journal/" class="nav-link"><i class="fas fa-book"></i> Journal</a>
-            <a href="/api/mood/" class="nav-link"><i class="fas fa-heart"></i> Mood</a>
-            <a href="/admin/" class="nav-link"><i class="fas fa-cog"></i> Admin</a>
+            .breadcrumb li {
+                display: flex;
+                align-items: center;
+            }
+
+            .breadcrumb li:not(:last-child)::after {
+                content: '/';
+                margin-left: 0.5rem;
+                opacity: 0.6;
+            }
+
+            .breadcrumb a {
+                color: #4facfe;
+                text-decoration: none;
+            }
+
+            .breadcrumb a:hover {
+                text-decoration: underline;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                color: white;
+                margin-bottom: 1rem;
+            }
+
+            .page-header {
+                margin-bottom: 2rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .well {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 15px;
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+                color: #4facfe;
+            }
+
+            .form-control, input, textarea, select {
+                width: 100%;
+                padding: 0.8rem;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                font-size: 0.9rem;
+            }
+
+            .form-control::placeholder, input::placeholder, textarea::placeholder {
+                color: rgba(255, 255, 255, 0.6);
+            }
+
+            .btn {
+                padding: 0.8rem 1.5rem;
+                border: none;
+                border-radius: 25px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .btn-primary {
+                background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+                color: white;
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            }
+
+            pre {
+                background: rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 10px;
+                color: white;
+                padding: 1rem;
+                overflow-x: auto;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            .highlight {
+                background: transparent;
+            }
+
+            .form-actions {
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .content-main {
+                color: white;
+            }
+
+            .response-info {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+        </style>
+        {% endblock %}
+    {% endblock %}
+</head>
+
+<body>
+    {% block navbar %}
+    <div class="navbar">
+        <div class="container">
+            {% block branding %}
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-brain"></i> Mental Health Partner API
+                </a>
+            {% endblock %}
+            
+            <ul class="nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/api/">API Root</a></li>
+                <li><a href="/admin/">Admin</a></li>
+            </ul>
         </div>
+    </div>
+    {% endblock %}
+
+    <div class="container-fluid">
+        {% block breadcrumbs %}
+        {% endblock %}
 
         {% block content %}
-        <div class="api-content">
-            <div class="breadcrumb">
-                <a href="/api/">API Root</a> / 
-                {% if name %}{{ name }}{% else %}Current Page{% endif %}
-            </div>
-            
-            <h2>{% if name %}{{ name }}{% else %}API Endpoint{% endif %}</h2>
-            
-            {% if allowed_methods %}
-            <div style="margin: 1rem 0;">
-                {% for method in allowed_methods %}
-                    <span class="method-badge method-{{ method|lower }}">{{ method }}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            <div class="endpoint-url">
-                {{ request.build_absolute_uri }}
-            </div>
-
-            {% if response_headers %}
-            <div class="form-section">
-                <h3>Response Headers</h3>
-                {% for key, value in response_headers.items %}
-                    <div><strong>{{ key }}:</strong> {{ value }}</div>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            {% if content %}
-            <div class="form-section">
-                <h3>Response</h3>
-                {% if status_code %}
-                    <div class="status-code status-{{ status_code }}">
-                        {{ status_code }} {% if status_text %}{{ status_text }}{% endif %}
-                    </div>
-                {% endif %}
-                <div class="json-response">{{ content|safe }}</div>
-            </div>
-            {% endif %}
-
-            {% if display_edit_forms %}
-            <div class="form-section">
-                <h3>API Interaction</h3>
-                {{ form|safe }}
-            </div>
-            {% endif %}
-        </div>
         {% endblock %}
     </div>
 
+    {% block script %}
     <script>
-        // Add some interactive functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-format JSON responses
-            const jsonElements = document.querySelectorAll('.json-response');
-            jsonElements.forEach(el => {
+            // Auto-format JSON in pre tags
+            const preElements = document.querySelectorAll('pre');
+            preElements.forEach(pre => {
                 try {
-                    const jsonText = el.textContent;
-                    if (jsonText.trim().startsWith('{') || jsonText.trim().startsWith('[')) {
-                        const parsed = JSON.parse(jsonText);
-                        el.innerHTML = '<pre>' + JSON.stringify(parsed, null, 2) + '</pre>';
+                    const text = pre.textContent.trim();
+                    if ((text.startsWith('{') && text.endsWith('}')) || 
+                        (text.startsWith('[') && text.endsWith(']'))) {
+                        const parsed = JSON.parse(text);
+                        pre.textContent = JSON.stringify(parsed, null, 2);
                     }
                 } catch(e) {
                     // Not valid JSON, leave as is
                 }
             });
-
-            // Add copy functionality to endpoint URLs
-            const endpointUrls = document.querySelectorAll('.endpoint-url');
-            endpointUrls.forEach(el => {
-                el.style.cursor = 'pointer';
-                el.title = 'Click to copy';
-                el.addEventListener('click', function() {
-                    navigator.clipboard.writeText(this.textContent.trim());
-                    const original = this.textContent;
-                    this.textContent = 'Copied!';
-                    setTimeout(() => {
-                        this.textContent = original;
-                    }, 1000);
-                });
-            });
         });
     </script>
+    {% endblock %}
 </body>
 </html>
