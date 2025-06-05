@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static,serve
 from api.views import landing_page
 urlpatterns = [
-    path('', landing_page, name='landing-page'),  # Beautiful landing page at root
+    path('', landing_page, name='landing-page'), 
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),  # Your API endpoints
 ]
