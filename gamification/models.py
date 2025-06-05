@@ -177,8 +177,11 @@ class UserReward(models.Model):
 class UserPoints(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     total_points = models.IntegerField(default=0)
-    current_points = models.IntegerField(default=0)  # Points available to spend
+    current_points = models.IntegerField(default=0) # Points available to spend
     last_updated = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name_plural = "User points"
     
     def add_points(self, points):
         self.total_points += points
