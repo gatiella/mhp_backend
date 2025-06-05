@@ -7,7 +7,7 @@
 **pycache**/
 *.py[cod]
 *.log
-# /media/  <- Remove this line or comment it out
+# /media/ yes
 /staticfiles/
 # Node/Web
 node_modules/

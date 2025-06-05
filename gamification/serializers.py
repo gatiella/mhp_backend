@@ -2,8 +2,9 @@ from rest_framework import serializers
 from .models import Quest, UserQuest, Achievement, UserAchievement, Reward, UserReward, UserPoints
 
 class QuestSerializer(serializers.ModelSerializer):
-    is_completed = serializers.BooleanField(read_only=True)
-    progress = serializers.FloatField(read_only=True)
+    # Fix: Properly declare these as SerializerMethodField
+    is_completed = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -16,7 +17,10 @@ class QuestSerializer(serializers.ModelSerializer):
 
     def get_image_url(self, obj):
         if obj.image:
-            return self.context['request'].build_absolute_uri(obj.image.url)
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
         return None
 
     def get_is_completed(self, obj):
@@ -39,13 +43,14 @@ class QuestSerializer(serializers.ModelSerializer):
             return quest.progress if quest else 0.0
         return 0.0
 
+# Rest of your serializers remain the same
 class UserQuestSerializer(serializers.ModelSerializer):
     quest = QuestSerializer(read_only=True)
     quest_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = UserQuest
-        fields = ['id', 'quest', 'quest_id', 'started_at', 'completed_at', 
+        fields = ['id', 'quest', 'quest_id', 'started_at', 'completed_at',
                  'is_completed', 'reflection', 'mood_before', 'mood_after']
         read_only_fields = ['started_at', 'completed_at', 'is_completed']
 
@@ -55,11 +60,11 @@ class CompleteQuestSerializer(serializers.Serializer):
 
 class AchievementSerializer(serializers.ModelSerializer):
     badge_image_url = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Achievement
         fields = ['id', 'title', 'description', 'category', 'badge_image', 'badge_image_url', 'points']
-    
+
     def get_badge_image_url(self, obj):
         """Get the full URL for the badge image"""
         if obj.badge_image:
@@ -78,12 +83,12 @@ class UserAchievementSerializer(serializers.ModelSerializer):
 
 class RewardSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Reward
         fields = ['id', 'title', 'description', 'points_required',
-                'partner_name', 'image', 'image_url', 'expiry_date']
-    
+                 'partner_name', 'image', 'image_url', 'expiry_date']
+
     def get_image_url(self, obj):
         """Get the full URL for the image"""
         if obj.image:
