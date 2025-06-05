@@ -135,10 +135,11 @@ class UserQuestViewSet(viewsets.ModelViewSet):
             result = UserQuestSerializer(user_quest, context={'request': request}).data
             result['points_earned'] = points_earned
             result['total_points'] = user_points.total_points
+            result['current_points'] = user_points.current_points  # ADD THIS LINE
             return Response(result)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
     @action(detail=False, methods=['get'])
     def active(self, request):
         """Get active (started but not completed) quests"""
