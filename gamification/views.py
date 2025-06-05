@@ -27,7 +27,7 @@ class QuestViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint for viewing quests
     """
-    queryset = Quest.objects.filter(is_active=True).order_by('id')  # Added ordering by id
+    queryset = Quest.objects.filter(is_active=True).order_by('id')
     serializer_class = QuestSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
@@ -36,26 +36,22 @@ class QuestViewSet(viewsets.ReadOnlyModelViewSet):
         """Add request to serializer context for image URL generation"""
         context = super().get_serializer_context()
         context.update({'request': self.request})
-        return {'request': self.request}
+        return context  # Fixed: was returning only {'request': self.request}
 
     @action(detail=False, methods=['get'])
     def recommended(self, request):
         """Get quests recommended for the current user"""
         try:
-            # Get the recommended quests
             recommended_queryset = get_recommended_quests(request.user)
-            
-            # Apply ordering and limiting here instead of in the get_recommended_quests function
             recommended = recommended_queryset.order_by('id')[:5]
-            
             serializer = self.get_serializer(recommended, many=True)
             return Response(serializer.data)
         except Exception as e:
-            # Log the exception
             import logging
             logger = logging.getLogger(__name__)
             logger.error(f"Error retrieving recommended quests: {str(e)}")
             return Response({"error": "Failed to retrieve recommended quests"}, status=500)
+
         
     @action(detail=False, methods=['get'])
     def categories(self, request):

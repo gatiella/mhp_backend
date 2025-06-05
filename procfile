@@ -1,1 +1,2 @@
-web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mental_health_partner.wsgi --log-file -
+#web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mental_health_partner.wsgi --log-file -
+web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn mental_health_partner.wsgi:application --bind 0.0.0.0:$PORT --log-file - --access-logfile - --error-logfile - --log-level info
