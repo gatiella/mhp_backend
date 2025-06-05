@@ -40,7 +40,7 @@ class QuestSerializer(serializers.ModelSerializer):
                 user=request.user,
                 quest=obj
             ).first()
-            return 1.0 if quest and quest.is_completed else 0.0
+            return  0.0
         return 0.0
 
 # Rest of your serializers remain the same
