@@ -164,6 +164,9 @@ STATICFILES_FINDERS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+os.makedirs(MEDIA_ROOT, exist_ok=True)
+os.makedirs(STATIC_ROOT, exist_ok=True)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
