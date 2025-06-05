@@ -6,7 +6,7 @@ from api.views import landing_page
 urlpatterns = [
     path('', landing_page, name='landing-page'), 
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),  # Your API endpoints
+    path('api/', include('api.urls')),  
 ]
 
 # Serve static and media files
