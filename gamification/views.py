@@ -337,8 +337,8 @@ class UserPointsViewSet(viewsets.ReadOnlyModelViewSet):
 
     def list(self, request, *args, **kwargs):
         """Override list to return single object"""
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
+        user_points, created = UserPoints.objects.get_or_create(user=request.user)
+        serializer = self.get_serializer(user_points)
         return Response(serializer.data)
     
 @api_view(['GET'])

@@ -21,10 +21,8 @@ class QuestAdmin(admin.ModelAdmin):
     def quest_image_preview(self, obj):
         """Show a preview of the image in admin list view"""
         if obj.image:
-            return f'<img src="{obj.image}" width="50" height="50" />'
+            return format_html('<img src="{}" width="50" height="50" style="object-fit: contain;" />', obj.image.url)
         return 'No Image'
-    
-    quest_image_preview.allow_tags = True
     quest_image_preview.short_description = 'Image Preview'
 
 @admin.register(UserQuest)
@@ -49,7 +47,6 @@ class AchievementAdmin(admin.ModelAdmin):
                 obj.badge_image.url
             )
         return 'No Badge'
-    
     badge_preview.short_description = 'Badge Preview'
 
 @admin.register(UserAchievement)
@@ -69,10 +66,8 @@ class RewardAdmin(admin.ModelAdmin):
     def reward_image_preview(self, obj):
         """Show a preview of the image in admin list view"""
         if obj.image:
-            return f'<img src="{obj.image.url}" width="50" height="50" />'
+            return format_html('<img src="{}" width="50" height="50" style="object-fit: contain;" />', obj.image.url)
         return 'No Image'
-    
-    reward_image_preview.allow_tags = True
     reward_image_preview.short_description = 'Image Preview'
 
 @admin.register(UserReward)
@@ -83,6 +78,7 @@ class UserRewardAdmin(admin.ModelAdmin):
 
 @admin.register(UserPoints)
 class UserPointsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'total_points', 'current_points')
+    list_display = ('user', 'total_points', 'current_points', 'last_updated')
     search_fields = ('user__username',)
     raw_id_fields = ('user',)
+    readonly_fields = ('last_updated',)
