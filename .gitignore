@@ -2,15 +2,13 @@
 .env
 .env.local
 .env.*.local
-
 # Django
 *.sqlite3
-__pycache__/
+**pycache**/
 *.py[cod]
 *.log
-/media/
+# /media/  <- Remove this line or comment it out
 /staticfiles/
-
 # Node/Web
 node_modules/
 dist/
