@@ -106,4 +106,4 @@ class UserPointsSerializer(serializers.ModelSerializer):
         fields = ['total_points', 'current_points', 'last_updated']
 
 class RedeemRewardSerializer(serializers.Serializer):
-    reward_id = serializers.IntegerField()#hey there test
+    reward_id = serializers.IntegerField()
