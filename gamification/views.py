@@ -289,8 +289,16 @@ class RewardViewSet(viewsets.ReadOnlyModelViewSet):
             reward_id = serializer.validated_data['reward_id']
             reward = get_object_or_404(Reward, id=reward_id, is_active=True)
             
+            # Check if user has already redeemed this reward
+            existing_redemption = UserReward.objects.filter(user=request.user, reward=reward).first()
+            if existing_redemption:
+                return Response(
+                    {"detail": "You have already redeemed this reward."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
             # Get user points
-            user_points, _ = UserPoints.objects.get_or_create(user=request.user)
+            user_points, created = UserPoints.objects.get_or_create(user=request.user)
             
             # Check if user has enough points
             if user_points.current_points < reward.points_required:
@@ -317,7 +325,7 @@ class RewardViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(result_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
 class UserPointsViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint for viewing user points
