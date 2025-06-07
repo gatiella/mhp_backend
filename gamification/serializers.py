@@ -59,14 +59,13 @@ class CompleteQuestSerializer(serializers.Serializer):
     mood_after = serializers.IntegerField(required=False, min_value=1, max_value=5)
 
 class AchievementSerializer(serializers.ModelSerializer):
-    badge_image_url = serializers.SerializerMethodField()
-
+    badge_image = serializers.SerializerMethodField()
+    
     class Meta:
         model = Achievement
-        fields = ['id', 'title', 'description', 'category', 'badge_image', 'badge_image_url', 'points']
-
-    def get_badge_image_url(self, obj):
-        """Get the full URL for the badge image"""
+        fields = ['id', 'title', 'description', 'category', 'badge_image', 'points']
+    
+    def get_badge_image(self, obj):
         if obj.badge_image:
             request = self.context.get('request')
             if request:
@@ -76,11 +75,11 @@ class AchievementSerializer(serializers.ModelSerializer):
 
 class UserAchievementSerializer(serializers.ModelSerializer):
     achievement = AchievementSerializer(read_only=True)
-
+    
     class Meta:
         model = UserAchievement
         fields = ['id', 'achievement', 'earned_at']
-
+        
 class RewardSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
 
